@@ -9,6 +9,10 @@ endif #TARGET_USES_QCOM_BSP
 #TARGET_DISABLE_DASH := true
 #TARGET_DISABLE_OMX_SECURE_TEST_APP := true
 
+# CAF Bluetooth API is different from AOSP, so we need this flag to tell de build system
+# that we want to use the CAF headers to build the Bluetoothd daemon
+BOARD_BLUETOOTH_BDROID_USE_CAF_EXTENSIONS := true
+
 # media_profiles and media_codecs xmls for 8974
 ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
 PRODUCT_COPY_FILES += device/fairphone_devices/FP2/media/media_profiles_8974.xml:system/etc/media_profiles.xml \
@@ -28,6 +32,8 @@ PRODUCT_BRAND := Fairphone
 PRODUCT_MANUFACTURER := Fairphone
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.google.clientidbase=android-fairphone
+
+GAIA_DEV_PIXELS_PER_PX := 3
 
 # Audio configuration file
 PRODUCT_COPY_FILES += \
@@ -56,9 +62,9 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:system/etc/permissions/android.hardware.sensor.stepdetector.xml
 
 #battery_monitor
-PRODUCT_PACKAGES += \
-    battery_monitor \
-    battery_shutdown
+#PRODUCT_PACKAGES += \
+#    battery_monitor \
+#    battery_shutdown
 
 #fstab.qcom
 PRODUCT_PACKAGES += fstab.qcom
@@ -74,12 +80,16 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += wcnss_service
 
-#ANT stack
+# for Gecko to support bluedroid stack
 PRODUCT_PACKAGES += \
-        AntHalService \
-        libantradio \
-        ANTRadioService \
-        antradio_app
+    bluetooth.default
+
+#ANT stack
+#PRODUCT_PACKAGES += \
+#        AntHalService \
+#        libantradio \
+#        ANTRadioService \
+#        antradio_app
 
 # Enable strict operation
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -92,6 +102,9 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1
 
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.adb.secure=0 
+
 PRODUCT_COPY_FILES += \
     device/fairphone_devices/FP2/whitelist_appops.xml:system/etc/whitelist_appops.xml
 
@@ -101,7 +114,7 @@ ifeq ($(TARGET_USES_QCA_NFC),true)
 NFC_D := true
 
 ifeq ($(NFC_D), true)
-    PRODUCT_PACKAGES += \
+#    PRODUCT_PACKAGES += \
         libnfcD-nci \
         libnfcD_nci_jni \
         nfc_nci.msm8974 \
@@ -109,14 +122,22 @@ ifeq ($(NFC_D), true)
         Tag \
         com.android.nfc_extras \
         com.android.nfc.helper
+ PRODUCT_PACKAGES += \
+        libnfcD-nci \
+        nfc_nci.msm8974 \
+        NfcDNci
 else
-PRODUCT_PACKAGES += \
+# PRODUCT_PACKAGES += \
     libnfc-nci \
     libnfc_nci_jni \
     nfc_nci.msm8974 \
     NfcNci \
     Tag \
     com.android.nfc_extras
+ PRODUCT_PACKAGES += \
+    libnfc-nci \
+    nfc_nci.msm8974 \
+    NfcNci 
 endif
 
 # file that declares the MIFARE NFC constant
@@ -130,19 +151,19 @@ PRODUCT_COPY_FILES += \
 # line has to be in sync with build/target/product/core_base.mk
 endif
 
-PRODUCT_BOOT_JARS += qcmediaplayer \
+#PRODUCT_BOOT_JARS += qcmediaplayer \
                      org.codeaurora.Performance \
                      vcard \
                      tcmiface
 ifneq ($(strip $(QCPATH)),)
-PRODUCT_BOOT_JARS += WfdCommon
-PRODUCT_BOOT_JARS += qcom.fmradio
-PRODUCT_BOOT_JARS += security-bridge
-PRODUCT_BOOT_JARS += qsb-port
-PRODUCT_BOOT_JARS += oem-services
+#PRODUCT_BOOT_JARS += WfdCommon
+#PRODUCT_BOOT_JARS += qcom.fmradio
+#PRODUCT_BOOT_JARS += security-bridge
+#PRODUCT_BOOT_JARS += qsb-port
+#PRODUCT_BOOT_JARS += oem-services
 endif
 
-PRODUCT_PACKAGES += \
+# PRODUCT_PACKAGES += \
                     FairphoneUpdater \
                     FairphoneLauncher3 \
                     AppOps \
@@ -151,10 +172,10 @@ PRODUCT_PACKAGES += \
                     FairphonePrivacyImpact \
                     ProgrammableButton
 
-PRODUCT_PACKAGES += iFixit
+#PRODUCT_PACKAGES += iFixit
 
 # Amaze File Manager
-PRODUCT_PACKAGES += Amaze 
+#PRODUCT_PACKAGES += Amaze 
 
 # Add boot animation
 PRODUCT_COPY_FILES += device/fairphone_devices/FP2/bootanimation.zip:system/media/bootanimation.zip
@@ -186,8 +207,18 @@ ifeq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_COPY_FILES += device/qcom/common/rootdir/etc/init.qcom.diag.rc.user:root/init.qcom.diag.rc
 endif
 
-ifeq ($(strip $(FP2_SKIP_BOOT_JARS_CHECK)),)
-SKIP_BOOT_JARS_CHECK := true
-endif
+# ifeq ($(strip $(FP2_SKIP_BOOT_JARS_CHECK)),)
+# SKIP_BOOT_JARS_CHECK := true
+# endif
+
+# Enable virtual home button for b2g
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.moz.has_home_button=0 \
+    ro.moz.nfc.enabled=true
+
+# Gecko (Gonk layer) needs this file for VolumeManager to work
+PRODUCT_COPY_FILES += \
+    device/fairphone_devices/FP2/volume.cfg:system/etc/volume.cfg
+
 
 DEVICE_PACKAGE_OVERLAYS += device/fairphone_devices/FP2/overlay
