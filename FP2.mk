@@ -211,10 +211,16 @@ endif
 # SKIP_BOOT_JARS_CHECK := true
 # endif
 
-# Enable virtual home button for b2g
+# Enable/disable some FFOS features
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.moz.has_home_button=0 \
-    ro.moz.nfc.enabled=true
+    ro.moz.nfc.enabled=false \
+    ro.moz.ril.0.network_types=gsm,wcdma,lte \
+    ro.moz.ril.1.network_types=gsm,wcdma,lte \
+    ro.moz.ril.emergency_by_default=true \
+    ro.moz.ril.subscription_control=true \
+    ro.moz.ril.numclients=2
+
 
 # Gecko (Gonk layer) needs this file for VolumeManager to work
 PRODUCT_COPY_FILES += \
