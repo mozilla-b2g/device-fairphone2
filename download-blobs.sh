@@ -16,13 +16,14 @@
 
 EXTRACT_RC="$PWD/extract.rc"
 
+version=2.0.1
 install_blobs() {
     mkdir -p download-$1 &&
     (cd download-$1 && shasum -p -c $2) ||
-    rm -rf download-$1/fp2-sibon-2.0.0-blobs.* &&
-    curl http://code.fairphone.com/downloads/FP2/blobs/fp2-sibon-2.0.0-blobs.tgz -o download-$1/fp2-sibon-2.0.0-blobs.tgz || exit -1 &&
-    tar xvfz download-$1/fp2-sibon-2.0.0-blobs.tgz -C download-$1 || exit -1 &&
-    BASH_ENV="$EXTRACT_RC" bash download-$1/fp2-sibon-2.0.0-blobs.sh || exit -1
+    rm -rf download-$1/fp2-sibon-$version-blobs.* &&
+    curl http://code.fairphone.com/downloads/FP2/blobs/fp2-sibon-$version-blobs.tgz -o download-$1/fp2-sibon-$version-blobs.tgz || exit -1 &&
+    tar xvfz download-$1/fp2-sibon-$version-blobs.tgz -C download-$1 || exit -1 &&
+    BASH_ENV="$EXTRACT_RC" bash download-$1/fp2-sibon-$version-blobs.sh || exit -1
     # Execute the contents of any vendorsetup.sh files we can find in the vendor blobs
     for f in `test -d vendor && find -L vendor -maxdepth 4 -name 'vendorsetup.sh' 2> /dev/null`
     do
