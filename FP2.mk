@@ -13,6 +13,10 @@ endif #TARGET_USES_QCOM_BSP
 # that we want to use the CAF headers to build the Bluetoothd daemon
 BOARD_BLUETOOTH_BDROID_USE_CAF_EXTENSIONS := true
 
+TARGET_DEVICE_BLOBS_LIST := true
+TARGET_DEVICE_BLOBS_SRC_DIR := vendor/qcom/proprietary/target/product/FP2/
+TARGET_DEVICE_BLOBS := device/fairphone_devices/FP2/proprietary-files.txt
+
 # media_profiles and media_codecs xmls for 8974
 ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
 PRODUCT_COPY_FILES += device/fairphone_devices/FP2/media/media_profiles_8974.xml:system/etc/media_profiles.xml \
@@ -208,7 +212,7 @@ PRODUCT_COPY_FILES += device/qcom/common/rootdir/etc/init.qcom.diag.rc.user:root
 endif
 
 # ifeq ($(strip $(FP2_SKIP_BOOT_JARS_CHECK)),)
-# SKIP_BOOT_JARS_CHECK := true
+# SKIP_BOOT_JARS_CHECK := false
 # endif
 
 # Enable virtual home button for b2g
