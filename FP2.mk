@@ -232,3 +232,6 @@ PRODUCT_COPY_FILES += \
 
 
 DEVICE_PACKAGE_OVERLAYS += device/fairphone_devices/FP2/overlay
+
+# Build Gecko with gcc-4.9
+GECKO_TOOLS_PREFIX = prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
