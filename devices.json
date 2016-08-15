@@ -3,7 +3,7 @@
     "id": "Fairphone 2",
     "adb": {
       "ro.product.device": [ "FP2" ],
-      "ro.build.display.id": ["r4275.1_FP2_gms36_1.1.7"]
+      "ro.build.display.id": ["r4275.1_FP2_gms36_1.1.7", "r4275.1_FP2_gms59_1.5.1", "FP2-userdebug 5.1 FP2 fp2-sibon-16.06.0"]
     },
     "fastboot": {
       "product": [ "fairphone2" ]
