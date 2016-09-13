@@ -14,7 +14,7 @@ endif #TARGET_USES_QCOM_BSP
 BOARD_BLUETOOTH_BDROID_USE_CAF_EXTENSIONS := true
 
 TARGET_DEVICE_BLOBS_LIST := true
-TARGET_DEVICE_BLOBS_SRC_DIR := vendor/qcom/proprietary/target/product/FP2/
+TARGET_DEVICE_BLOBS_SRC_DIR := out/target/product/FP2/system/
 TARGET_DEVICE_BLOBS := device/fairphone_devices/FP2/proprietary-files.txt
 
 # media_profiles and media_codecs xmls for 8974
